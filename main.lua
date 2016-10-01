@@ -86,6 +86,7 @@ function love.run()
 			lg.origin()
 			love.draw()
 			lg.setCanvas()
+			set_color()
 			lg.draw(game_canvas, 0, 0, 0, game_scale, game_scale)
 			lg.present()
 		end

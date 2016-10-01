@@ -1,5 +1,7 @@
 local state = {}
 
+local timer = 0;
+
 function state:enter(previous, ...)
 
 end
