@@ -198,6 +198,26 @@ function format_path(path, sep)
 	return path
 end
 
+reload_count = 0
+local modify_time = {}
+local file_cache = {}
+function reload(filename)
+	local complete_fn = filename:gsub('%.', '/') .. ".lua"
+	local last_mod = love.filesystem.getLastModified(complete_fn)
+	assert(last_mod, "File '"..filename.."' does not exist.")
+	if last_mod ~= modify_time[filename] then
+		modify_time[filename] = last_mod
+		reload_count = reload_count + 1
+		local success, result = pcall(love.filesystem.load, complete_fn)
+		if success then
+			file_cache[filename] = result()
+		else
+			error("Failed to reload file '"..filename.."'.")
+		end
+	end
+	return file_cache[filename]
+end
+
 function set_color(color)
 	if color then
 		lg.setColor(cColor[color])

@@ -3,9 +3,10 @@ local state = {}
 local timer
 local spr_title
 local choices = {
-	{"Play",    function() Gamestate.switch(cState.play) end},
-	{"Options", function() Gamestate.switch(cState.options) end},
-	{"Exit",    function() love.event.quit() end},
+	{"Play",     function() Gamestate.switch(reload("state.play")) end},
+	{"Options",  function() Gamestate.switch(reload("state.options")) end},
+	{"Credit",   function() Gamestate.switch(reload("state.credit")) end},
+	{"Exit",     function() love.event.quit() end},
 }
 local spr_choices
 local selected
@@ -58,6 +59,8 @@ end
 
 
 function state:draw()
+	lg.setFont(lg.newFont(default_font_size))
+	lg.print("test")
 	spr_title:draw()
 	spr_avatar:draw()
 	set_color(16)
