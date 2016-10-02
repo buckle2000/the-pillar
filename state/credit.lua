@@ -1,9 +1,8 @@
 local state = {}
 
 -- local spr_fonts
-
 -- local function txt(font, fontname, author)
--- 	return Sprite(lg.newText(font, fontname .. " by " .. author))
+-- 	return new_txt(fontname .. " by " .. author)
 -- end
 
 function state:enter()

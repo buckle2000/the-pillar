@@ -3,12 +3,14 @@ vec       = require("lib/hump.vector")
 Class     = require("lib/hump.class")
 Timer     = require("lib/hump.timer")
 lg        = love.graphics
-require("utils")
-require("core")
+
 
 --- Load global variables
 --- Initialize game
 function love.load(arg)
+	require("utils")
+	reload("constant")
+
 	cFont = {}
 	cFont.tiny   = load_font("04B_03", 8)
 	cFont.normal = load_font("m5x7", 16)
@@ -16,10 +18,9 @@ function love.load(arg)
 	cFont.hand   = load_font("pixel-love", 8)
 	cFont.mono   = load_font("coders_crux", 16)
 	cFont.retro  = load_font("Pixel-Musketeer", 14)
-	table.seal(cFont)
 
-	reload("constant")
-	game_bgcolor = cColor[1]
+	reload("constant", true)
+	require("core")
 
 	Gamestate.registerEvents()
 	Gamestate.switch(reload("state/menu"))

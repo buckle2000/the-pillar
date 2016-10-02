@@ -131,14 +131,14 @@ end
 --################################################--
 
 function load_font(name, size)
-	return love.graphics.newFont("asset/font/"..name..".ttf", size)
+	return love.graphics.newFont(path_to_font .. name .. ".ttf", size)
 end
 
 local loaded_images = {}
 
 function load_image(name)
 	if not loaded_images[name] then
-		loaded_images[name] = love.graphics.newImage("asset/image/"..name..".png")
+		loaded_images[name] = love.graphics.newImage(path_to_image .. name .. ".png")
 	end
 	return loaded_images[name]
 end
@@ -198,14 +198,29 @@ function format_path(path, sep)
 	return path
 end
 
+function set_color(color)
+	if is_n(color) then
+		lg.setColor(cColor[color])
+	elseif is_t(color) then
+		lg.setColor(color)
+	else
+		lg.setColor(255, 255, 255)
+	end
+end
+
+-- new text sprite
+function new_txt(font, string)
+	return Sprite(lg.newText(font, string))
+end
+
 reload_count = 0
 local modify_time = {}
 local file_cache = {}
-function reload(filename)
+function reload(filename, force)
 	local complete_fn = filename:gsub('%.', '/') .. ".lua"
 	local last_mod = love.filesystem.getLastModified(complete_fn)
 	assert(last_mod, "File '"..filename.."' does not exist.")
-	if last_mod ~= modify_time[filename] then
+	if force or last_mod ~= modify_time[filename] then
 		modify_time[filename] = last_mod
 		reload_count = reload_count + 1
 		local success, result = pcall(love.filesystem.load, complete_fn)
@@ -216,12 +231,4 @@ function reload(filename)
 		end
 	end
 	return file_cache[filename]
-end
-
-function set_color(color)
-	if color then
-		lg.setColor(cColor[color])
-	else
-		lg.setColor(255, 255, 255)
-	end
 end

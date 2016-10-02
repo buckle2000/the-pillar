@@ -1,4 +1,4 @@
-cColor = table.seal{
+cColor = {
 	{ 20,  12,  28},
 	{ 68,  36,  52},
 	{ 48,  52, 109},
@@ -17,9 +17,19 @@ cColor = table.seal{
 	{222, 238, 214},
 }
 
-game_width = 160
-game_height = 144
-game_scale = 6
+if cFont then
+	debug_font = cFont.tiny
+end
+debug_font_color = cColor[1]
+-- default_fot_size = 14
+
+game_version = "v0.1"
+game_width   = 160
+game_height  = 144
+game_scale   = 4
+-- game_bgcolor = cColor[1]  -- background color, you can set this arbitrarily in code
 love.window.setMode(game_width * game_scale, game_height * game_scale)
 
-default_font_size = 14
+path_to_image = "assets/image/"
+path_to_font = "assets/font/"
+

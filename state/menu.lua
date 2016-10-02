@@ -11,6 +11,7 @@ local choices = {
 local spr_choices
 local selected
 local spr_avatar
+local spr_version
 
 
 function state:enter(previous, ...)
@@ -46,9 +47,10 @@ function state:enter(previous, ...)
 		end
 	end
 
-	spr_avatar = Sprite("authorx11")
+	spr_avatar = Sprite("b2x11")
 	spr_avatar:setxy(game_width - spr_avatar.width, game_height - spr_avatar.height)
-
+	spr_version = new_txt(debug_font, game_version)
+	spr_version:setxy(0, game_height - spr_version.height)
 	game_bgcolor = cColor[14]
 end
 
@@ -59,8 +61,6 @@ end
 
 
 function state:draw()
-	lg.setFont(lg.newFont(default_font_size))
-	lg.print("test")
 	spr_title:draw()
 	spr_avatar:draw()
 	set_color(16)
@@ -73,6 +73,8 @@ function state:draw()
 			spr:draw()
 		end
 	end
+	set_color(debug_font_color)
+	spr_version:draw()
 end
 
 
@@ -87,12 +89,8 @@ function state:keypressed(key)
 end
 
 
-function state:leave()
-	spr_title = nil
-	ch_sprites = nil
-	spr_avatar = nil
-	timer = nil
-	collectgarbage()
-end
+-- function state:leave()
+-- 	self.selected = selected
+-- end
 
 return state

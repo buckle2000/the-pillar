@@ -45,7 +45,9 @@ local function change_state(stack_offset, to, ...)
 
 	stack[#stack+stack_offset] = to
 	state_is_dirty = true
-	return (to.enter or __NULL__)(to, pre, ...)
+	local next_state = (to.enter or __NULL__)(to, pre, ...)
+	collectgarbage()
+	return next_state
 end
 
 function GS.switch(to, ...)
