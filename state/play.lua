@@ -2,7 +2,6 @@ local Player = Class{__includes = Sprite}
 
 function Player:init(texture)
 	Sprite.init(self, texture)
-	
 end
 
 function Player:setv(vx, vy)
@@ -14,7 +13,6 @@ end
 function Player:update(dt)
 	Sprite.update(self, dt)
 	self.pos = self.pos + self.v * dt
-	return self
 end
 
 --+++++++++++++++++++++++++++++++++++++++

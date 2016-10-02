@@ -519,69 +519,6 @@
 	},
 	"buffers":
 	[
-		{
-			"file": "core.lua",
-			"settings":
-			{
-				"buffer_size": 1295,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "constant.lua",
-			"settings":
-			{
-				"buffer_size": 533,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "aseprite.lua",
-			"settings":
-			{
-				"buffer_size": 4308,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "utils.lua",
-			"settings":
-			{
-				"buffer_size": 5230,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "main.lua",
-			"settings":
-			{
-				"buffer_size": 1637,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "state/play.lua",
-			"settings":
-			{
-				"buffer_size": 162,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "state/menu.lua",
-			"settings":
-			{
-				"buffer_size": 2084,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		}
 	],
 	"build_system": "",
 	"build_system_choices":
@@ -806,8 +743,8 @@
 	"build_varint": "",
 	"command_palette":
 	{
-		"height": 400.0,
-		"last_filter": "prev",
+		"height": 242.0,
+		"last_filter": "",
 		"selected_items":
 		[
 			[
@@ -1267,7 +1204,7 @@
 				"Trimmer: Trim leading whitespace."
 			]
 		],
-		"width": 536.0
+		"width": 408.0
 	},
 	"console":
 	{
@@ -1300,17 +1237,26 @@
 	],
 	"file_history":
 	[
-		"/C/buckle2000/project/major/thepillar/constant.lua",
-		"/C/buckle2000/project/major/thepillar/state/credit.lua",
-		"/C/buckle2000/project/major/thepillar/utils.lua",
-		"/C/buckle2000/project/major/thepillar/state/play.lua",
-		"/C/buckle2000/project/major/Breakpoint/src/aseprite.lua",
-		"/C/buckle2000/project/major/thepillar/CREDIT.md",
+		"/C/buckle2000/project/major/thepillar/refresh_assets.py",
+		"/C/buckle2000/project/major/thepillar/assets/image/title.json",
+		"/C/buckle2000/project/major/thepillar/threadrpc.lua",
 		"/C/buckle2000/project/major/thepillar/main.lua",
-		"/C/buckle2000/project/major/thepillar/state/options.lua",
+		"/C/buckle2000/project/major/thepillar/conf.lua",
+		"/C/buckle2000/project/major/thepillar/constant.lua",
+		"/C/buckle2000/project/major/thepillar/test2.lua",
+		"/C/buckle2000/project/major/thepillar/testrpc.lua",
+		"/C/buckle2000/project/major/thepillar/thepillar.sublime-project",
+		"/C/buckle2000/project/major/thepillar/state/play.lua",
 		"/C/buckle2000/project/major/thepillar/state/menu.lua",
 		"/C/buckle2000/project/major/thepillar/core.lua",
-		"/C/buckle2000/project/major/thepillar/conf.lua",
+		"/C/buckle2000/project/新建文件夹/main.lua",
+		"/C/buckle2000/project/major/thepillar/utils.lua",
+		"/C/buckle2000/project/major/thepillar/lib/hump/gamestate.lua",
+		"/C/buckle2000/project/major/thepillar/aseprite.lua",
+		"/C/buckle2000/project/major/thepillar/state/credit.lua",
+		"/C/buckle2000/project/major/Breakpoint/src/aseprite.lua",
+		"/C/buckle2000/project/major/thepillar/CREDIT.md",
+		"/C/buckle2000/project/major/thepillar/state/options.lua",
 		"/C/buckle2000/project/major/thepillar/asset/image/db16.gpl",
 		"/C/buckle2000/project/major/thepillar/_state_template.lua",
 		"/C/buckle2000/project/major/thepillar/play_state.lua",
@@ -1418,16 +1364,7 @@
 		"/C/buckle2000/project/major/Breakpoint/src/assets/image/chr_boy.json",
 		"/C/buckle2000/project/major/Breakpoint/src/state/base.lua",
 		"/C/buckle2000/project/major/Breakpoint/src/lib/aseprite.lua",
-		"/C/buckle2000/project/major/Breakpoint/src/lib/anim8.lua",
-		"/C/buckle2000/project/major/Breakpoint/src/tableproxy.lua",
-		"/C/buckle2000/project/major/Breakpoint/src/新建文本文档.txt",
-		"/C/buckle2000/doc/高二上/实践/slide.md",
-		"/C/buckle2000/doc/高二上/实践/slide.html",
-		"/C/buckle2000/doc/高二上/实践/reveal.js/css/reveal.css",
-		"/C/buckle2000/doc/高二上/实践/.travis.yml",
-		"/C/buckle2000/doc/高二上/实践/stop_at_empty_floor.gif",
-		"/C/buckle2000/software/Aseprite/aseprite.ini",
-		"/C/buckle2000/project/major/Breakpoint/src/tr/en.lua"
+		"/C/buckle2000/project/major/Breakpoint/src/lib/anim8.lua"
 	],
 	"find":
 	{
@@ -1448,6 +1385,16 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"width",
+			"is_",
+			"value_t",
+			"is_n",
+			"chn_in",
+			"my_player",
+			"ip",
+			"selected",
+			"step",
+			"cframe",
 			"spr_debug",
 			"path_to_font",
 			"tag",
@@ -1565,17 +1512,7 @@
 			"draw",
 			"shader",
 			"invoke",
-			"remove",
-			"destroyed",
-			"memory",
-			"data",
-			"camera",
-			"path",
-			"suit",
-			"SUIT",
-			"suit",
-			"draw(",
-			"drawTilelayer"
+			"remove"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1608,280 +1545,8 @@
 	"groups":
 	[
 		{
-			"selected": 1,
 			"sheets":
 			[
-				{
-					"buffer": 0,
-					"file": "core.lua",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1295,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								399,
-								399
-							]
-						],
-						"settings":
-						{
-							"WordCount":
-							{
-								"changes": 1323,
-								"count": 85,
-								"modified": false,
-								"selection": false,
-								"status": -1,
-								"syntax": "plain text"
-							},
-							"syntax": "Packages/SublimeLove/Love.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 4,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "constant.lua",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 533,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								365,
-								365
-							]
-						],
-						"settings":
-						{
-							"WordCount":
-							{
-								"changes": 324,
-								"count": 62,
-								"modified": false,
-								"selection": false,
-								"status": -1,
-								"syntax": "plain text"
-							},
-							"syntax": "Packages/SublimeLove/Love.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 342.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "aseprite.lua",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 4308,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1152,
-								1152
-							]
-						],
-						"settings":
-						{
-							"WordCount":
-							{
-								"changes": 139,
-								"count": 394,
-								"modified": false,
-								"selection": false,
-								"status": -1,
-								"syntax": "plain text"
-							},
-							"syntax": "Packages/SublimeLove/Love.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 6,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "utils.lua",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 5230,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								4899,
-								4899
-							]
-						],
-						"settings":
-						{
-							"WordCount":
-							{
-								"changes": 45,
-								"count": 382,
-								"modified": false,
-								"selection": false,
-								"status": -1,
-								"syntax": "plain text"
-							},
-							"syntax": "Packages/SublimeLove/Love.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 3895.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 5,
-					"type": "text"
-				}
-			]
-		},
-		{
-			"selected": 2,
-			"sheets":
-			[
-				{
-					"buffer": 4,
-					"file": "main.lua",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1637,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								648,
-								648
-							]
-						],
-						"settings":
-						{
-							"WordCount":
-							{
-								"changes": 240,
-								"count": 67,
-								"modified": false,
-								"selection": false,
-								"status": -1,
-								"syntax": "plain text"
-							},
-							"syntax": "Packages/SublimeLove/Love.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "state/play.lua",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 162,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								17,
-								17
-							]
-						],
-						"settings":
-						{
-							"WordCount":
-							{
-								"changes": 0,
-								"count": 12,
-								"modified": false,
-								"selection": false,
-								"status": -1,
-								"syntax": "plain text"
-							},
-							"syntax": "Packages/SublimeLove/Love.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 3,
-					"type": "text"
-				},
-				{
-					"buffer": 6,
-					"file": "state/menu.lua",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 2084,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1664,
-								1673
-							]
-						],
-						"settings":
-						{
-							"WordCount":
-							{
-								"changes": 337,
-								"count": 130,
-								"modified": false,
-								"selection": false,
-								"status": -1,
-								"syntax": "plain text"
-							},
-							"syntax": "Packages/SublimeLove/Love.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 855.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				}
 			]
 		}
 	],
@@ -1902,18 +1567,11 @@
 				0,
 				1,
 				1
-			],
-			[
-				1,
-				0,
-				2,
-				1
 			]
 		],
 		"cols":
 		[
 			0.0,
-			0.5,
 			1.0
 		],
 		"rows":

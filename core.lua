@@ -25,15 +25,27 @@ function Sprite:setxy(x, y)
 	return self
 end
 
+-- function Sprite:setoffset(ox, oy)
+-- 	self.ox = ox
+-- 	self.oy = oy
+-- 	return self
+-- end
+
+-- function Sprite:center_offset()
+-- 	self.ox = self.width / 2
+-- 	self.oy = self.height / 2
+-- 	return self
+-- end
+
 function Sprite:draw()
 	local x, y = self.pos:unpack()
 	x, y = math.round(x), math.round(y)
 	if self.quad then
-		lg.draw(self.texture, self.quad, x, y)
+		-- rot, sx, sy
+		lg.draw(self.texture, self.quad, x, y)--, nil, nil, nil, self.ox, self.oy)
 	else
-		lg.draw(self.texture, x, y)
+		lg.draw(self.texture, x, y)--, nil, nil, nil, self.ox, self.oy)
 	end
-	return self
 end
 
 function Sprite:update(dt)
