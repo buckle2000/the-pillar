@@ -174,7 +174,7 @@ function key_as_analog(left,right,up,down)
 	if iskeydown(right) then dx = dx + 1 end
 	if iskeydown(up)    then dy = dy - 1 end
 	if iskeydown(down)  then dy = dy + 1 end
-	return dx, dy
+	return vec(dx, dy):normalized()
 end
 
 -- https://github.com/stevedonovan/Penlight/blob/master/lua/pl/path.lua#L286
@@ -213,7 +213,7 @@ function new_txt(font, string)
 	return Sprite(lg.newText(font, string))
 end
 
-reload_count = 0
+reload_count = {}
 local modify_time = {}
 local file_cache = {}
 function reload(filename, force)
@@ -222,13 +222,13 @@ function reload(filename, force)
 	assert(last_mod, "File '"..filename.."' does not exist.")
 	if force or last_mod ~= modify_time[filename] then
 		modify_time[filename] = last_mod
-		reload_count = reload_count + 1
 		local success, result = pcall(love.filesystem.load, complete_fn)
 		if success then
 			file_cache[filename] = result()
 		else
 			error("Failed to reload file '"..filename.."'.")
 		end
+		reload_count[filename] = (reload_count[filename] or 0) + 1
 	end
 	return file_cache[filename]
 end

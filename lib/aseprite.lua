@@ -51,6 +51,7 @@ end
 
 function Tag:reset()
 	if self.from == self.to then
+		self.current = self.from
 		self.next = only_frame  -- save time
 	else
 		self.next = nil  -- expose Class method
@@ -109,10 +110,13 @@ local Animation = Class()
 -- @param partial_path something like 'path/to/image'
 --   will load 'path/to/image.png'
 --   and 'path/to/image.json' (must exist)
-function Animation:init(img_name)
+function Animation:init(cfg_name)
 	-- load config
-	local cfg = json.decode(love.filesystem.read(path_to_image .. img_name .. ".json"))
+	local cfg = json.decode(love.filesystem.read(path_to_image .. cfg_name .. ".json"))
 	local sw, sh = cfg.meta.size.w, cfg.meta.size.h
+	assert(#cfg.frames > 0, "This is an animation with no frame.")
+	self.width  = cfg.frames[1].frame.w
+	self.height = cfg.frames[1].frame.h
 	self.frames = {}
 	for i,frame in ipairs(cfg.frames) do
 		self.frames[i] = Frame(
@@ -126,7 +130,7 @@ function Animation:init(img_name)
 	end
 	self._all_tag = Tag.all(#self.frames)
 	self:set_tag()
-	self.acc_t = 0
+	self.acc_t = 0  -- accumulated time since last frame change
 end
 
 function Animation:get_quad()

@@ -1,4 +1,5 @@
 lg = love.graphics
+tostring = require("lib/inspect")
 
 function love.load(arg)
 	-- require modules
@@ -10,17 +11,6 @@ function love.load(arg)
 	--- Initialize game
 	require("utils")
 	reload("conf")
-
-	--- Load global variables
-	cFont = {}
-	cFont.tiny   = load_font("04B_03", 8)
-	cFont.normal = load_font("m5x7", 16)
-	cFont.solid  = load_font("3Dventure", 16)
-	cFont.hand   = load_font("pixel-love", 8)
-	cFont.mono   = load_font("coders_crux", 16)
-	cFont.retro  = load_font("Pixel-Musketeer", 14)
-
-	reload("conf", true)
 	require("core")
 
 	Gamestate.registerEvents()
@@ -40,11 +30,12 @@ function love.run()
 	if #arg > 0 then
 		require(arg[1])
 	end
-	love.load(arg)
-
-	lg.setDefaultFilter('linear', 'nearest')
+	
+	lg.setDefaultFilter("linear", "nearest")
 	lg.setLineStyle("rough")
 	local game_canvas = lg.newCanvas(game_width, game_height)
+
+	love.load(arg)
 	
 	local dt = 0
 	love.timer.step()
@@ -66,8 +57,8 @@ function love.run()
 			lg.clear(game_bgcolor)
 			lg.origin()
 			love.draw()
-			lg.setCanvas()
 			lg.setColor(255, 255, 255)
+			lg.setCanvas()
 			lg.draw(game_canvas, 0, 0, 0, game_scale, game_scale)
 			lg.present()
 		end

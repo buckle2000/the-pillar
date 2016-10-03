@@ -1,3 +1,8 @@
+--[[
+Created by buckle2000, No Copyright (CC0)
+http://github.com/buckle2000/
+]]
+
 local OP_UNSET = 0
 local OP_SET = 1
 local OP_CALL = 2
@@ -44,6 +49,8 @@ function rpc_mt.__call(t)
 			local cb = rawget(t, "callbacks")[key]
 			if cb then
 				cb(unpack(event, 3))
+			else
+				error("No callback '" .. key .. "' registered.")
 			end
 		else
 			error(("Invalid op code %d."):format(op))
