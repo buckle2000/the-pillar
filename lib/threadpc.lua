@@ -1,6 +1,9 @@
 --[[
+Cross-thread procedure call
 Created by buckle2000, No Copyright (CC0)
 http://github.com/buckle2000/
+
+
 ]]
 
 local OP_UNSET = 0
@@ -13,8 +16,9 @@ local rpc_mt = {}
 function rpc_mt.__index(t, key)
 	local value = rawget(t, "values")[key]
 	if value == nil then
+		local chn_out = rawget(t, "chn_out")
 		return function (...)
-			rawget(t, "chn_out"):push({OP_CALL, key, ...})
+			chn_out:push({OP_CALL, key, ...})
 		end
 	else
 		return value
@@ -34,19 +38,17 @@ function rpc_mt.__newindex(t, key, value)
 	end
 end
 
--- update values, call callbacks
-function rpc_mt.__call(t)
-	local chn_in = rawget(t, "chn_in")
+local function update_local(chn_in, values, callbacks)
 	local event = chn_in:pop()
 	while event ~= nil do
 		local op = event[1]
 		local key = event[2]
 		if op == OP_UNSET then
-			rawget(t, "values")[key] = nil
+			values[key] = nil
 		elseif op == OP_SET then
-			rawget(t, "values")[key] = event[3]
+			values[key] = event[3]
 		elseif op == OP_CALL then
-			local cb = rawget(t, "callbacks")[key]
+			local cb = callbacks[key]
 			if cb then
 				cb(unpack(event, 3))
 			else
@@ -57,6 +59,13 @@ function rpc_mt.__call(t)
 		end
 		event = chn_in:pop()
 	end
+end
+
+-- update values, call callbacks
+function rpc_mt.__call(t)
+	local chn_in = rawget(t, "chn_in")
+	-- update_local(chn_in, rawget(t, "values"), rawget(t, "callbacks"))  -- process anything including ones sent during processing
+	chn_in:performAtomic(update_local, rawget(t, "values"), rawget(t, "callbacks"))
 end
 
 local function is_channel(x)

@@ -226,9 +226,20 @@ function reload(filename, force)
 		if success then
 			file_cache[filename] = result()
 		else
-			error("Failed to reload file '"..filename.."'.")
+			error(('Failed to reload file "%s".\n%s'):format(filename, result))
 		end
 		reload_count[filename] = (reload_count[filename] or 0) + 1
 	end
 	return file_cache[filename]
+end
+
+function simple_ds(class, template)
+	class = class or {}
+	class._template = template
+	function class:init(...) 
+		assert(#self._template == select(..., '#'), "Argument number not match.")
+		for i,v in ipairs(self._template) do
+			self[v] = select(..., i)
+		end
+	end
 end

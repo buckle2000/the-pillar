@@ -31,30 +31,86 @@ end
 
 --+++++++++++++++++++++++++++++++++++++++
 
-local state = {}
+local libthreadpc = require("lib/threadpc")
+local pcproxy = libthreadpc("network->main", "main->network")
+
+--+++++++++++++++++++++++++++++++++++++++
 
 local players
-local my_player_id
-local function add_player(id)
-	id = id or '127.0.0.1' .. os.time()
+local remotes
+
+local gevent = {}
+
+function gevent.player_add(id)
 	assert(not players[id], "Player uuid conflict: " .. id)
 	players[id] = Player("human", true)
-	return id
 end
+
+function gevent.player_spawn(id)
+	assert(players[id], "No player: " .. id)
+end
+
+function gevent.player_move(id, v, pos)
+	local player = players[id]
+	player.v = v
+	if pos then
+		player.pos = pos
+	end
+end
+
+-- function gevent.
+
+-- Auto allocate number representations (id) for events
+do
+	local event_id = 1
+	for convention_name, func in pairs(gevent) do
+		gevent[event_id] = gevent[convention_name]
+		local current_event_id = event_id
+		gevent[convention_name] = function (...)
+			-- THIS LINE let network thread send packet
+			gevent[current_event_id](...)
+		end
+		event_id = event_id + 1
+	end
+end
+
+--+++++++++++++++++++++++++++++++++++++++
+
+local state = {}
+
+local net_thread
+local my_player_id
 
 function state:enter(previous, ...)
 	players = {}
-	my_player_id = add_player()
+	remotes = {}
+	net_thread = love.thread.newThread("network.lua")
+	net_thread:start()
+	-- TODO better uuid
+	my_player_id = '127.0.0.1' .. os.time()
+	gevent.player_add(my_player_id)
 end
 
+local function ctrl_player(id)
+	local dir = key_as_analog('left', 'right', 'up', 'down')
+	gevent.player_move(id, dir * 50)
+end
+
+local function process_player(id)
+	local player = players[id]
+	-- TODO map
+	-- TODO collision
+	-- TODO attack
+	-- TODO traps
+end
 
 function state:update(dt)
-	local dir = key_as_analog('left', 'right', 'up', 'down')
-	local me = players[my_player_id]
-	me.v = dir * 20
+	ctrl_player(my_player_id)
 	for k,v in pairs(players) do
 		v:update(dt)
 	end
+	pcproxy()
+	process_player(my_player_id)
 end
 
 function state:draw()

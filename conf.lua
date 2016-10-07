@@ -31,11 +31,11 @@ if reload_count then
 else
 	--- Plain constants (do not need other variables)
 	--- Please do NOT change these during gameplay
-	game_version = "v0.1"
-	game_width   = 160
-	game_height  = 144
-	game_scale   = 4
-	game_bgcolor = nil
+	game_version         = "v0.1"
+	game_width           = 160
+	game_height          = 144
+	game_scale           = 4
+	game_bgcolor         = nil
 
 	path_to_image = "assets/image/"
 	path_to_font = "assets/font/"

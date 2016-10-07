@@ -21,6 +21,7 @@ function love.update(dt)
 	reload("conf")
 end
 
+
 function love.run()
 	if not love.filesystem.isFused() then
 		arg = {unpack(arg, 2)}
