@@ -37,16 +37,15 @@ else
 	game_scale           = 4
 	game_bgcolor         = nil
 
+	path_to_font  = "assets/font/"
 	path_to_image = "assets/image/"
-	path_to_font = "assets/font/"
+	path_to_map   = "assets/map/"
 end
 
 
 function love.conf(t)
 	t.version = "0.10.1"
 	t.console = true
-	t.window.title = "The Pillar"
-	t.window.width = game_width * game_scale
-	t.window.height = game_height * game_scale
+	t.window = false
 	love._config = t
 end

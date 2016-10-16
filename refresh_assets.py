@@ -32,7 +32,9 @@ def create_dir(path):
 
 def run():
     shutil.rmtree(PATH_ASSETS_IMAGE, True)
+    shutil.rmtree(PATH_ASSETS_MAP, True)
     create_dir(PATH_ASSETS_IMAGE)
+    create_dir(PATH_ASSETS_MAP)
     for filename in os.listdir(PATH_MATERIAL):
         # ignore if file name starts with -
         if filename.startswith('-'):
@@ -49,11 +51,18 @@ def run():
             if not os.path.exists(dst):
                 shutil.copy(file, dst)
         elif ext == ".ase" or ext == ".aseprite":
-            dst = PATH_ASSETS_IMAGE + root + ".png"
-            sheet_data = PATH_ASSETS_IMAGE + root + ".json"
-            assert_not_exist(dst)
-            subprocess.run((EXE_ASEPRITE, '-b', file,
-                            "--sheet", dst, "--data", sheet_data, "--list-layers", "--list-tags", "--format", "json-array"))
+            if root.startswith("m_"):
+                root = root[2:]
+                dst = PATH_ASSETS_MAP + root + ".png"
+                dst_mask = PATH_ASSETS_MAP + root + "_meta.png"
+                subprocess.run((EXE_ASEPRITE, '-b', file, "--sheet", dst)) # 可见图层
+                subprocess.run((EXE_ASEPRITE, '-b', "--all-layers", file, "--layer", "meta", "--sheet", dst_mask)) # 碰撞检测
+            else:
+                dst = PATH_ASSETS_IMAGE + root + ".png"
+                sheet_data = PATH_ASSETS_IMAGE + root + ".json"
+                assert_not_exist(dst)
+                subprocess.run((EXE_ASEPRITE, '-b', file,
+                                "--sheet", dst, "--data", sheet_data, "--list-layers", "--list-tags", "--format", "json-array"))
         else:
             continue
         print(filename, 'exported')

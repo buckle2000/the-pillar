@@ -32,6 +32,8 @@ function love.run()
 		require(arg[1])
 	end
 	
+	love.window.setMode(game_width * game_scale, game_height * game_scale)
+	love.window.setTitle("The Pillar")
 	lg.setDefaultFilter("linear", "nearest")
 	lg.setLineStyle("rough")
 	local game_canvas = lg.newCanvas(game_width, game_height)

@@ -8,7 +8,7 @@ local DISCONNECT_VERSION_MISMATCH = 1
 local EVENT_ROOM_INFO    = 1
 local EVENT_PLAYER_JOIN  = 2
 local EVENT_PLAYER_LEAVE = 3
-local EVENT_TODO         = 233
+local EVENT_TODO         = 233 -- TODO make more event
 
 local libthreadpc = require("lib/threadpc")
 local libsocket   = require("socket")
@@ -79,8 +79,8 @@ local network_states = {
 			while 1 do
 				local data = udp:receive()
 				if data then
-					local server_property = binser.d(data)
-					pcproxy.found_server(server_property)
+					local room_info = binser.d(data)
+					pcproxy.found_room(room_info)
 				else break end
 			end
 		end,
@@ -89,32 +89,32 @@ local network_states = {
 		end
 	},
 
--- TODO send play event
+-- TODO send in game event
 --- Host room or in room
 	matchmake = {
 		-- @param room_host_addr  if nil:          create a room
 		--                        if enet address: address of host of room to join
-		enter = function(self, last_status, room_host_addr, room_name)
+		enter = function(self, last_status, room_info)
 			self.host = libenet.host_create("*:0")
 			self.address = self.host:get_socket_address()
 			self.uuid = Uuid()
 			self.self = ClientInfoDef(self.uuid, self.address)
-			--- Room members, excluding yourself
+			--- self.room.members   Room members, excluding yourself
 			-- mapping  enet.peer => info = ClientInfoDef
-			self.members = {}
-			self.is_owner = not room_host_addr
-			if room_host_addr then
+			if room_info then
+				self.is_owner = false
 				-- connect to room
-
+				self.room = room_info
 			else
 				-- create a new room
+				self.is_owner = true
 				local udp = assert(libsocket.udp())  -- udp socket, used to find server by multicast
 				assert(udp:settimeout(0))  -- no blocking
 				assert(udp:setsockname("*", UDP_PORT))  -- bind to PORT
 				assert(udp:setoption("ip-add-membership", {multiaddr = UDP_GROUP, interface = "*"}))
 				self.udp = udp
 				-- TODO create room
-				self.room_name = room_name
+				self.room = RoomInfoDef(PROTOCOL_VERSION, room_name, self.self, {})
 			end
 			-- self.is_owner = is_owner  -- is the owner of this room
 		end,
@@ -124,31 +124,36 @@ local network_states = {
 					local data, ip, port = udp:receivefrom()
 					if data then
 						local client_property = binser.d(data)
-						-- TODO maybe I can do something with client_property?
+						-- IDEA maybe I can do something with client_property?
 						udp:sendto(binser.s(RoomInfoDef(PROTOCOL_VERSION, self.room_name, self.self, self.members)))
 					else break end
 				end
 			end
-			local event = self.host:service(0)
-			while event do
-				local peer = event.peer
-				if event.type == "receive" then
-
-				elseif event.type == "connect" then
-					local remote_pt_ver = event.data
+			local nw_event = self.host:service(0)
+			while nw_event do
+				local peer = nw_event.peer
+				if nw_event.type == "receive" then
+					if self.room.members[peer] then
+						local gevent = binser.d(nw_event.data)
+						-- TODO do things according to gevent.type
+					end
+				elseif nw_event.type == "connect" then
+					local remote_pt_ver = nw_event.data
 					-- protocal version check
 					if remote_pt_ver == PROTOCOL_VERSION then
-						self.members[]
-						peer:send(binser.s(EventDef())))
-						if self.is_owner then
-							-- TODO tell everyone else about our new member
-						end
+						-- peer:send(binser.s(EventDef(EVENT_ROOM_INFO, )))
+						-- self.members[]
+						-- peer:send(binser.s(EventDef())))
+						-- if self.is_owner then
+						-- 	self.host:broadcast(binser.s((EventDef())))
+						-- 	-- TODO tell everyone else about our new member, let everyone add him/her
+						-- end
 					else
 						peer:disconnect(DISCONNECT_VERSION_MISMATCH)
 					end
-				elseif event.type == "disconnect" then
+				elseif nw_event.type == "disconnect" then
 					if self.is_owner then
-						-- TODO tell everyone else about its leave
+						-- TODO tell everyone else about the member's leave
 					end
 				else
 					error("Invalid enet event type: ".. event.type ..".\nMay need to upgrade lua-enet.")

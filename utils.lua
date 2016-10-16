@@ -2,6 +2,8 @@
 -------------------- MATH PATCH --------------------
 --################################################--
 
+local math = require("math")
+
 function math.aabbsintersect( minA, maxA, minB, maxB )
 	return minA.x <= maxB.x and
 	       maxA.x >= minB.x and
@@ -70,6 +72,8 @@ end
 ------------------- TABLE PATCH --------------------
 --################################################--
 
+local table = require("table")
+
 function table.foreach(t, apply, ...)
 	for i,v in ipairs(t) do
 		apply(v, ...)
@@ -127,6 +131,34 @@ function is_t(x)
 end
 
 --################################################--
+--------------------- 2D Array ---------------------
+--################################################--
+
+array2d = Class()
+
+function array2d:init(width, height, initial_value)
+	self.width = width
+	self.height = height
+	assert(initial_value ~= nil)
+	for i=0, width*height - 1 do
+		self[i] = initial_value
+	end
+end
+
+function array2d:toindex(x, y)
+	return y * self.width + x
+end
+
+function array2d:set(x, y, val)
+	self[self:toindex(x,y)] = val
+	-- return val
+end
+
+function array2d:get(x, y)
+	return self[self:toindex(x,y)]
+end
+
+--################################################--
 -------------------- PATCH END ---------------------
 --################################################--
 
@@ -136,11 +168,36 @@ end
 
 local loaded_images = {}
 
-function load_image(name)
-	if not loaded_images[name] then
-		loaded_images[name] = love.graphics.newImage(path_to_image .. name .. ".png")
+function load_image(name, do_not_cache)
+	local image = love.graphics.newImage(path_to_image .. name .. ".png")
+	if do_not_cache then
+		return image
+	else
+		if not loaded_images[name] then
+			loaded_images[name] = image
+		end
+		return loaded_images[name]
 	end
-	return loaded_images[name]
+end
+
+MAP_MASK_UNDEFINED = 0
+MAP_MASK_EMPTY     = 1
+MAP_MASK_GROUND    = 2
+MAP_MASK_SPAWN     = 3
+
+function load_map(name)
+	local map_img = love.graphics.newImage(path_to_map .. name .. ".png")
+	local col_mask_img_data = love.image.newImageData(path_to_map .. name .. "_meta.png")
+	local width, height = col_mask_img_data:getDimensions()
+	local col_mask = array2d(width, height, MAP_MASK_EMPTY)
+	-- TODO
+	col_mask_img_data:mapPixel(function(x, y, r, g, b, a)
+		if r > 128 then
+			col_mask:set(x, y, MAP_MASK_GROUND)
+		end
+		return r, g, b, a
+	end)
+	return map_img, col_mask
 end
 
 -- pixel precise drawing

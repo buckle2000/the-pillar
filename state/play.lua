@@ -4,6 +4,8 @@ function Player:init(...)
 	Sprite.init(self, ...)
 	self:center_offset()
 	self._static = false
+	self.alive = false
+	-- self:revive()
 end
 
 function Player:setv(vx, vy)
@@ -29,13 +31,28 @@ function Player:update(dt)
 	Sprite.update(self, dt)
 end
 
+function Player:hurt(damage)
+	self.health = self.health - damage
+	if self.health <= 0 then
+		self.alive = false
+	end
+end
+
+function Player:revive()
+	self.alive = true
+	self.health = 100
+end
+
 --+++++++++++++++++++++++++++++++++++++++
 
+local mlib = require("lib/mlib")
 local libthreadpc = require("lib/threadpc")
 local pcproxy = libthreadpc("network->main", "main->network")
 
---+++++++++++++++++++++++++++++++++++++++
+-- --+++++++++++++++++++++++++++++++++++++++
 
+local spr_map
+local col_mask  -- collision mask
 local players
 local remotes
 
@@ -44,10 +61,12 @@ local gevent = {}
 function gevent.player_add(id)
 	assert(not players[id], "Player uuid conflict: " .. id)
 	players[id] = Player("human", true)
+	players[id]:setxy(80, 72)
 end
 
 function gevent.player_spawn(id)
 	assert(players[id], "No player: " .. id)
+	players[id]:revive()
 end
 
 function gevent.player_move(id, v, pos)
@@ -58,17 +77,27 @@ function gevent.player_move(id, v, pos)
 	end
 end
 
+function gevent.map_init(map_name)
+	local a, b = load_map(map_name)
+	col_mask = b
+	spr_map = Sprite(a)
+end
+
 -- function gevent.
 
 -- Auto allocate number representations (id) for events
 do
+	local gevent_names = {}
+	for name,v in pairs(gevent) do
+		table.insert(gevent_names, name)
+	end
 	local event_id = 1
-	for convention_name, func in pairs(gevent) do
-		gevent[event_id] = gevent[convention_name]
-		local current_event_id = event_id
-		gevent[convention_name] = function (...)
-			-- THIS LINE let network thread send packet
-			gevent[current_event_id](...)
+	for i, name in pairs(gevent_names) do
+		local func = gevent[name]
+		gevent[event_id] = func
+		gevent[name] = function (...)
+			-- TODO THIS LINE let network thread send packet
+			func(...)
 		end
 		event_id = event_id + 1
 	end
@@ -81,6 +110,14 @@ local state = {}
 local net_thread
 local my_player_id
 
+-- test
+-- function stripey( x, y, r, g, b, a )
+--    r = math.min(r * math.sin(x*100)*2, 255)
+--    g = math.min(g * math.cos(x*150)*2, 255)
+--    b = math.min(b * math.sin(x*50)*2, 255)
+--    return r,g,b,a
+-- end
+
 function state:enter(previous, ...)
 	players = {}
 	remotes = {}
@@ -88,7 +125,9 @@ function state:enter(previous, ...)
 	net_thread:start()
 	-- TODO better uuid
 	my_player_id = '127.0.0.1' .. os.time()
+	gevent.map_init("round")
 	gevent.player_add(my_player_id)
+	gevent.player_spawn(my_player_id)
 end
 
 local function ctrl_player(id)
@@ -98,6 +137,10 @@ end
 
 local function process_player(id)
 	local player = players[id]
+	local x, y = player.pos:unpack()
+	if col_mask:get(math.floor(x), math.floor(y)) == MAP_MASK_EMPTY then
+		player:hurt(100000)
+	end
 	-- TODO map
 	-- TODO collision
 	-- TODO attack
@@ -107,20 +150,31 @@ end
 function state:update(dt)
 	ctrl_player(my_player_id)
 	for k,v in pairs(players) do
-		v:update(dt)
+		if v.alive then
+			v:update(dt)
+		end
 	end
 	pcproxy()
 	process_player(my_player_id)
 end
 
 function state:draw()
+	spr_map:draw()
 	for k,v in pairs(players) do
-		v:draw()
+		if v.alive then
+			v:draw()
+		end
 	end
 end
 
-function state:leave()
-
+function state:keypressed(key)
+	if key == 'r' then
+		self:enter()
+	end
 end
+
+-- function state:leave()
+	-- TODO
+-- end
 
 return state
